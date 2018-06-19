@@ -23,13 +23,11 @@ public class CCActionManager : SSActionManager, ISSActionCallback {
                 GameObject gameObject = hitGameObject.collider.gameObject;
                 if (gameObject.tag == "devil" || gameObject.tag == "priest")
                 {
-                    userClickAction = UserClickAction.GetSSAction();
-                    this.RunAction(gameObject, userClickAction, this);
+                    OnBoat(gameObject,this);
                 }
                 else if (gameObject.transform.parent.name == "boat" && sceneController.boatCapacity < 2 && (moveToAction == null || !moveToAction.enable))
                 {
-                    moveToAction = CCMoveToAction.GetSSAction(-gameObject.transform.parent.transform.position, 10*Time.deltaTime);
-                    this.RunAction(gameObject.transform.parent.gameObject, moveToAction, this);
+                    MoveBoat(sceneController.boat,this);
                 }
             }
         }
@@ -46,6 +44,14 @@ public class CCActionManager : SSActionManager, ISSActionCallback {
     {
         if (source == moveToAction)
         {
+            foreach (GameObject a in sceneController.onBoatDevil)
+            {
+                OnBoat(a, this);
+            }
+            foreach (GameObject a in sceneController.onBoatPriest)
+            {
+                OnBoat(a, this);
+            }
             int startDevilNum = sceneController.startDevil.Count + (source.transform.position.x < 0 ? sceneController.onBoatDevil.Count : 0);
             int startPriestNum = sceneController.startPriest.Count + (source.transform.position.x < 0 ? sceneController.onBoatPriest.Count : 0);
             if (startDevilNum > startPriestNum && startPriestNum != 0)
@@ -69,5 +75,15 @@ public class CCActionManager : SSActionManager, ISSActionCallback {
             this.RunAction(moveToAction.gameObject, moveToAction, moveToAction.callback);
             sceneController.flag = 0;
         }
+    }
+    public void OnBoat(GameObject gameObject,ISSActionCallback callback)
+    {
+        userClickAction = UserClickAction.GetSSAction();
+        this.RunAction(gameObject, userClickAction, callback);
+    }
+    public void MoveBoat(GameObject gameObject, ISSActionCallback callback)
+    {
+        moveToAction = CCMoveToAction.GetSSAction(-gameObject.transform.position, 10 * Time.deltaTime);
+        this.RunAction(gameObject, moveToAction, this);
     }
 }

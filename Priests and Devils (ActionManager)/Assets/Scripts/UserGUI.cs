@@ -23,15 +23,19 @@ public class UserGUI : MonoBehaviour {
         {
             action.Pause();
         }
+        if(action.flag == 0 && GUI.Button(new Rect(0, 240, 80, 60), "Help")) {
+            AI aI = new AI();
+            aI.Run();
+        }
         if (action.flag == 1)
         {
             fontstyle1.normal.textColor = Color.green;
-            GUI.Label(new Rect(Screen.width / 2 - 150, 0, 300, 100), "You Win!", fontstyle1);
+            GUI.Label(new Rect(Screen.width / 2 - 150, Screen.height / 2 - 50, 300, 100), "You Win!", fontstyle1);
         }
         else if (action.flag == 2)
         {
             fontstyle1.normal.textColor = Color.red;
-            GUI.Label(new Rect(Screen.width / 2 - 150, 0, 300, 100), "You Lose!", fontstyle1);
+            GUI.Label(new Rect(Screen.width / 2 - 150, Screen.height / 2 - 50, 300, 100), "You Lose!", fontstyle1);
         }
     }
 }
